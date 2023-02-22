@@ -6,8 +6,6 @@ import time # Para usar retrasos en las respuestas
 import threading
 
 
-
-
 # Instanciamos el Bot de Telegram
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
