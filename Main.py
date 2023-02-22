@@ -1,17 +1,18 @@
-from config import * # TELEGRAM_TOKEN
-
-#from Config import * # Importamos el Token
+#from config import * # TELEGRAM_TOKEN y todo lo que hay en config.py
+from config import TELEGRAM_TOKEN # Importamos el Token
+from config import MI_CHAT_ID # Importamos el id del chat
+from config import CID_CANAL1 # Importamos el id del canal 1
 import telebot # Para manejar la api de Telegram
 import time # Para usar retrasos en las respuestas
 import threading
 
 
 # Instanciamos el Bot de Telegram
-bot = telebot.TeleBot(TOKEN, parse_mode=None)
+bot = telebot.TeleBot(TELEGRAM_TOKEN, parse_mode=None)
 
 # definiciones
 
-# veinte_verdades = '''
+veinte_verdades = '''
 # 1- La verdadera democracia es aquella donde el gobierno hace lo que el pueblo quiere y defiende un solo interés: el del pueblo.
 # 2- El peronismo es esencialmente popular. Todo círculo político es antipopular y, por lo tanto, no peronista.
 # 3- El peronista trabaja para el Movimiento. El que, en su nombre, sirve a un círculo o a un caudillo, lo es solo de nombre.
@@ -47,9 +48,9 @@ def bot_menssajes_texto(message):
     if message.text and message.text.startswith("/"):
         bot.send_message(message.chat.id, "Comando no disponible")
     else:
-        #if (message.text.__contains__("20 verdades") or message.text.__contains__("veinte verdades")):
-        #    bot.send_message(message.chat.id, veinte_verdades, parse_mode="html", disable_notification=True)
-        #else:
+        if (message.text.__contains__("20 verdades") or message.text.__contains__("veinte verdades")):
+            bot.send_message(message.chat.id, veinte_verdades, parse_mode="html", disable_notification=True)
+        else:
             x = bot.send_message(message.chat.id, "<b>HOLA</b>", parse_mode="html", disable_notification=True)
             time.sleep(2)
             bot.edit_message_text("<u>¡Lean a Perón!</u>", message.chat.id, x.message_id, parse_mode="html")
