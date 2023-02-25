@@ -1,14 +1,13 @@
-#from config import * # TELEGRAM_TOKEN y todo lo que hay en config.py
-from config import TELEGRAM_TOKEN # Importamos el Token
-from config import MI_CHAT_ID # Importamos el id del chat
-from config import CID_CANAL1 # Importamos el id del canal 1
+import os
 import telebot # Para manejar la api de Telegram
 import time # Para usar retrasos en las respuestas
 import threading
 
+#Solicitar TOKEN
+TOKEN = os.getenv("TOKEN")
 
 # Instanciamos el Bot de Telegram
-bot = telebot.TeleBot(TELEGRAM_TOKEN, parse_mode=None)
+bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
 # definiciones
 
