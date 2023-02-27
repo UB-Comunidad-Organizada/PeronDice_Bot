@@ -1,15 +1,17 @@
-import os       # Para interactuar con el sistema
-import telebot  # Para manejar la api de Telegram
-import random   # Para elegir aleatoriamente de la base de dato
-import time     # Para usar retrasos en las respuestas
+import config, logging, os, json, importlib, telebot, random, time, threading, telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler
 
-#Solicitar TOKEN
-TOKEN = os.getenv("TOKEN")
+#Solicitar TOKEN comentar según corresponda.
+#TOKEN = os.getenv("TOKEN")
+TOKEN = config.TOKEN
+MI_CHAT_ID = config.MI_CHAT_ID
 
 # Instanciamos el Bot de Telegram
-bot = telebot.TeleBot(TOKEN, parse_mode=None)
+bot = telebot.TeleBot(TOKEN)
 
-# Definiciones
+""" Esto pasará a estar en una base de datos independiente y autónoma que el programa consultará """
+
+# Definiciones 
 
 respuestas = {
     "verdad": [
@@ -54,7 +56,7 @@ respuestas = {
 @bot.message_handler(commands=["start", "ayuda", "help"])
 def cmd_start(message):
     """ Da la bienvenida al usuario del Bot """
-    bot.reply_to(message, "¡Hola! ¿En qué puedo servir?")
+    bot.reply_to(message, "¡Hola! ¿En qué te puedo servir?")
 
 # Responder a los mensajes de texto que no son comandos
 @bot.message_handler(content_types=["text", "photo"])
@@ -72,7 +74,45 @@ def bot_mensajes_texto(message):
         if respuesta:
             bot.send_message(message.chat.id, respuesta)
         else:
-            bot.send_message(message.chat.id, "No entendí lo que dijiste. ¿Podrías reformularlo?")
+            x = bot.send_message(message.chat.id, "<b>No entendí lo que dijiste. ¿Podrías reformularlo?</b>", parse_mode="html")
+            time.sleep(2)
+            bot.edit_message_text(text="<u>Y siempre es mejor participar de cualquier Unidad Básica para hablar con los compañeros</u>", chat_id=message.chat.id, message_id=x.message_id, parse_mode="html")
+            time.sleep(3)
+            bot.edit_message_text('<a href="https://t.me/UB_Comunidad_Organiza">UB Comunidad Organizada</a>', message.chat.id, x.message_id, parse_mode="html")
+            time.sleep(5)
+            bot.delete_message(message.chat.id, x.message_id)
+            bot.delete_message(message.chat.id, message.message_id)
+
+def recibir_mensajes():
+    """Bucle infinito que comprueba si hay nuevos mensajes en el bot"""
+    bot.infinity_polling()
+
+
+# MAIN #########################################################
+if __name__ == '__main__':
+    # configuramos los comandos disponibles del bot
+    bot.set_my_commands([
+        telebot.types.BotCommand("/start", "Da la bienvenida"),
+        telebot.types.BotCommand("/ayuda", "Da lo mismo que start"),
+        ])
+    print('iniciando el bot')
+    hilo_bot = threading.Thread(name="hilo_bot", target=recibir_mensajes)
+    hilo_bot.start()
+    print('Bot ya iniciado')
+    bot.send_message(chat_id=MI_CHAT_ID, text='Ya estamos en linea!')
+
+updater = Updater(TOKEN)
+updater.start_polling()
+
+# Detener el bot con Updater.stop()
+updater.stop()
+
+
+# Updater.idle() # Permite finalizar el bot con Ctrl + C
+
+""" # Viejo lanzador.
 
 # Ejecutar el bot
 bot.polling()
+
+"""

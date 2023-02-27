@@ -1,4 +1,5 @@
-python-telegram-bot
 telebot
 telegram
+python-telegram-bot
+pyTelegramBotAPI
 pandas
