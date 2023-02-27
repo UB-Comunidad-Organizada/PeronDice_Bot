@@ -1,7 +1,7 @@
-import os
-import telebot
-import random
-import time
+import os       # Para interactuar con el sistema
+import telebot  # Para manejar la api de Telegram
+import random   # Para elegir aleatoriamente de la base de dato
+import time     # Para usar retrasos en las respuestas
 
 #Solicitar TOKEN
 TOKEN = os.getenv("TOKEN")
@@ -57,7 +57,7 @@ def cmd_start(message):
     bot.reply_to(message, "¡Hola! ¿En qué puedo servir?")
 
 # Responder a los mensajes de texto que no son comandos
-@bot.message_handler(content_types=["text"])
+@bot.message_handler(content_types=["text", "photo"])
 def bot_mensajes_texto(message):
     # Gestiona los mensajes de texto recibidos
     if message.text and message.text.startswith("/"):
