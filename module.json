@@ -1,15 +1,16 @@
 {
     "modules": [
-        "os",
+        "config",
         "logging",
-        "telebot",
+        "os",
+        "telegram",
+        "threading",
         "random",
         "time",
-        "threading",
-        "telegram",
         "telegram.ext",
         "telegram.ext.Updater",
         "telegram.ext.CommandHandler",
-        "telegram.ext.MessageHandler"
+        "telegram.ext.MessageHandler",
+        "telegram.ext.Filters"
     ]
 }
