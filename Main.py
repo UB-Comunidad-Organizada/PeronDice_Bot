@@ -7,15 +7,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger()
 
-# Solicitar TOKEN comentar según corresponda.
-#TOKEN = config.TOKEN
-#MI_CHAT_ID = config.MI_CHAT_ID
-#CID_CANAL1 = config.CID_CANAL1
+# COMENTAR SEGÚN CORRESPONDA 
 
-TOKEN = os.getenv("TOKEN")
-MI_CHAT_ID = os.getenv("MI_CHAT_ID")
-CID_CANAL1 = os.getenv("CID_CANAL1")
-mode = os.getenv("MODE")
+# Solicitar constantes al archivo config.py
+TOKEN = config.TOKEN
+MI_CHAT_ID = config.MI_CHAT_ID
+CID_CANAL1 = config.CID_CANAL1
+mode = config.MODE
+PORT = config.PORT
+
+# solicitar constantes al entorno virtual
+# TOKEN = os.getenv("TOKEN")
+# MI_CHAT_ID = os.getenv("MI_CHAT_ID")
+# CID_CANAL1 = os.getenv("CID_CANAL1")
+# mode = os.getenv("MODE")
 
 if mode == "dev":
     # Acceso Local (desarrollo)
@@ -138,6 +143,7 @@ def bot_mensajes_texto(message):
             time.sleep(5)
             bot.delete_message(message.chat.id, x.message_id)
             bot.delete_message(message.chat.id, message.message_id)
+
 
 ## Función para recibir los mensajes entrantes del bot
 def recibir_mensajes():
