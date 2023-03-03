@@ -160,6 +160,6 @@ dp.add_handler(CommandHandler("start", start))
 dp.add_handler(CommandHandler("ayuda", ayuda))
 dp.add_handler(CommandHandler("random", random_number))
 dp.add_handler(MessageHandler(Filters.text, echo))
-dp.add_handler(MessageHandler(Filters.text, bot_mensajes_texto))
+dp.add_handler(MessageHandler(Filters.text,))
 
 run(updater)
