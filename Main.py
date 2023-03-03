@@ -144,6 +144,7 @@ def bot_mensajes_texto(message):
             bot.delete_message(message.chat.id, x.message_id)
             bot.delete_message(message.chat.id, message.message_id)
 
+
 ## Función para recibir los mensajes entrantes del bot
 def recibir_mensajes():
     updater.idle()
