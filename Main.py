@@ -1,4 +1,4 @@
-import config, logging, os, telegram, threading, random, time
+import config, logging, os, sys, telegram, threading, random, time
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Configurar Logging
@@ -8,14 +8,34 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 # Solicitar TOKEN comentar según corresponda.
-'''
+#TOKEN = config.TOKEN
+#MI_CHAT_ID = config.MI_CHAT_ID
+#CID_CANAL1 = config.CID_CANAL1
+
 TOKEN = os.getenv("TOKEN")
 MI_CHAT_ID = os.getenv("MI_CHAT_ID")
 CID_CANAL1 = os.getenv("CID_CANAL1")
-'''
-TOKEN = config.TOKEN
-MI_CHAT_ID = config.MI_CHAT_ID
-CID_CANAL1 = config.CID_CANAL1
+mode = os.getenv("MODE")
+
+if mode == "dev":
+    # Acceso Local (desarrollo)
+    def run(updater):
+        updater.start_polling()
+        print("Bot Cargado")
+        updater.idle() #permite finalizar el bot con Ctrl + C
+
+elif mode == "prod":
+    # Acceso HEROKU (producción)
+    def run(updater):
+        PORT == int(os.environ.get("PORT", "8443"))
+        HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
+        # Code from https://github.com/python-telegram-bote/python-telegram-bot/wiki/Webhooks#heroku
+        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
+        updater.bot.set_webhook(f"https://{HEROKU_APP_NAME}.herokuapp.com/{TOKEN}")
+
+else:
+    logger.info("no se especificó el MODE")
+    sys.exit()
 
 # Creamos un objeto Updater y lo configuramos para que use nuestro TOKEN
 updater = Updater(token=TOKEN, use_context=True)
@@ -23,8 +43,9 @@ updater = Updater(token=TOKEN, use_context=True)
 # Arreglar Bot
 bot = Updater
 
+"""
 # Definiciones 
-""" Esto pasará a estar en una base de datos independiente y autónoma que el programa consultará """
+# Esto pasará a estar en una base de datos independiente y autónoma que el programa consultará 
 respuestas = {
     "verdad": [
         "La verdadera democracia es aquella donde el gobierno hace lo que el pueblo quiere y defiende un solo interés: el del pueblo.",
@@ -63,6 +84,7 @@ respuestas = {
         "¡Nos vemos!"
     ]
 }
+"""
 
 def start(update, context):
     logger.info(f"El usuario {update.effective_user['username']}, ha enviado el comando /Start")
@@ -91,6 +113,7 @@ def echo(update, context):
         text = f"*Escribiste:*\n_{text}_"
     )
 
+"""
 # Responder a los mensajes de texto que no son comandos
 #bot.message_handler(content_types=["text"])
 def bot_mensajes_texto(message):
@@ -119,6 +142,7 @@ def bot_mensajes_texto(message):
 ## Función para recibir los mensajes entrantes del bot
 def recibir_mensajes():
     updater.idle()
+"""
 
 if __name__ == "__main__":
         # Obtener información de nuestro Bot
@@ -138,7 +162,4 @@ dp.add_handler(CommandHandler("random", random_number))
 dp.add_handler(MessageHandler(Filters.text, echo))
 dp.add_handler(MessageHandler(Filters.text, bot_mensajes_texto))
 
-# Carga el PeronDiceBot
-updater.start_polling()
-print("Bot Cargado")
-updater.idle() #permite finalizar el bot con Ctrl + C
+run(updater)
